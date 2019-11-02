@@ -1,0 +1,126 @@
+    "mappings": {
+        "_doc": {
+            "properties": {
+                "act_status": {
+                    "type": "byte"
+                },
+                "ao_guid": {
+                    "type": "keyword"
+                },
+                "ao_id": {
+                    "type": "keyword"
+                },
+                "ao_level": {
+                    "type": "byte"
+                },
+                "area_code": {
+                    "type": "short"
+                },
+                "auto_code": {
+                    "type": "short"
+                },
+                "cent_status": {
+                    "type": "byte"
+                },
+                "city_ar_code": {
+                    "type": "short"
+                },
+                "city_code": {
+                    "type": "short"
+                },
+                "code": {
+                    "type": "long"
+                },
+                "curr_status": {
+                    "type": "byte"
+                },
+                "div_type": {
+                    "type": "short"
+                },
+                "end_date": {
+                    "type": "date"
+                },
+                "extr_code": {
+                    "type": "short"
+                },
+                "formal_name": {
+                    "index_options": "docs",
+                    "norms": false,
+                    "type": "text"
+                },
+                "ifns_fl": {
+                    "type": "short"
+                },
+                "ifns_ul": {
+                    "type": "short"
+                },
+                "live_status": {
+                    "type": "byte"
+                },
+                "next_id": {
+                    "type": "keyword"
+                },
+                "norm_doc": {
+                    "type": "keyword"
+                },
+                "off_name": {
+                    "index_options": "docs",
+                    "norms": false,
+                    "type": "text"
+                },
+                "okato": {
+                    "type": "long"
+                },
+                "oktmo": {
+                    "type": "long"
+                },
+                "oper_status": {
+                    "type": "byte"
+                },
+                "parent_guid": {
+                    "type": "keyword"
+                },
+                "place_code": {
+                    "type": "short"
+                },
+                "plain_code": {
+                    "type": "long"
+                },
+                "plan_code": {
+                    "type": "short"
+                },
+                "postal_code": {
+                    "type": "long"
+                },
+                "prev_id": {
+                    "type": "keyword"
+                },
+                "region_code": {
+                    "type": "byte"
+                },
+                "short_name": {
+                    "index_options": "docs",
+                    "norms": false,
+                    "type": "text"
+                },
+                "start_date": {
+                    "type": "date"
+                },
+                "street_code": {
+                    "type": "short"
+                },
+                "sub_ext_code": {
+                    "type": "short"
+                },
+                "terr_ifns_fl": {
+                    "type": "short"
+                },
+                "terr_ifns_ul": {
+                    "type": "short"
+                },
+                "update_date": {
+                    "type": "date"
+                }
+            }
+        }
+    }

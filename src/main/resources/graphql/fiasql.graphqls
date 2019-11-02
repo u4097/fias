@@ -1,0 +1,26 @@
+type Address {
+    id: ID!,
+    aoid: String,
+    guid: String,
+    name: String,
+    type: String,
+    regionCode: String,
+    cityCode: String,
+    placeCode: String,
+    aoLevel: Int,
+    startDate: String,
+    updateDate: String,
+    endDate: String,
+    actualityStatus: Int,
+    liveStatus: Int,
+    currentStatus: Int
+}
+
+
+
+
+type Query {
+    addressByGuid(guid: String): [Address]
+    addressByName(name: String): [Address]
+}
+
