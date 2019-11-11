@@ -14,8 +14,8 @@ import org.springframework.data.elasticsearch.repository.config.EnableElasticsea
 
 
 @Configuration
-@EnableElasticsearchRepositories(basePackages = "ru.basis.fias.repository")
-@ComponentScan(basePackages = "ru.basis.fias.service")
+@EnableElasticsearchRepositories(basePackages = "ru.bazis.fias.repository")
+@ComponentScan(basePackages = "ru.bazis.fias.service")
 public class RestClientConfig extends AbstractElasticsearchConfiguration {
 
   @Override
