@@ -140,11 +140,11 @@ public class Address {
   List<House> houses;
 
   // AutoCode Код автономной области
-  @Field(type = FieldType.Short)
+  @Field(name = "auto_code", type = FieldType.Short)
   @SerializedName("auto_code")
   private String autoCode;
 
-  @Field(type = FieldType.Short)
+  @Field(name = "city_ar_code", type = FieldType.Short)
   @SerializedName("city_ar_code")
   private String cityArCode;
 
@@ -160,66 +160,68 @@ public class Address {
   @SerializedName("settlement_cent_status")
   private String settlementCentStatus;
 
-
-  @Field(type = FieldType.Long)
+  @Field(name = "code", type = FieldType.Long)
   @SerializedName("code")
   private String code;
 
-  @Field(type = FieldType.Short)
+  @Field(name = "div_type", type = FieldType.Short)
   @SerializedName("div_type")
   private String divType;
 
-  @Field(type = FieldType.Keyword)
+  @Field(name = "norm_doc", type = FieldType.Keyword)
   @SerializedName("norm_doc")
   private String normDoc;
 
-  @Field(type = FieldType.Long)
+  @Field(name = "okato", type = FieldType.Long)
   @SerializedName("okato")
   private String okato;
 
-  @Field(type = FieldType.Long)
+  @Field(name = "oktmo", type = FieldType.Long)
   @SerializedName("oktmo")
   private String oktmo;
 
-  @Field(type = FieldType.Byte)
+  @Field(name = "oper_status", type = FieldType.Byte)
   @SerializedName("oper_status")
   private String operStatus;
 
-  @Field(type = FieldType.Short)
+  @Field(name = "plan_code", type = FieldType.Short)
   @SerializedName("plan_code")
   private String planCode;
 
-  @Field(type = FieldType.Long)
+  @Field(name = "postal_code", type = FieldType.Long)
   @SerializedName("postal_code")
   private String postalCode;
 
-  @Field(type = FieldType.Keyword)
+  @Field(name = "prev_id", type = FieldType.Keyword)
   @SerializedName("prev_id")
   private String prevId;
 
-  @Field(type = FieldType.Short)
+  @Field(name = "extr_code", type = FieldType.Short)
+  @SerializedName("extr_code")
+  private String extrCode;
+
+  @Field(name = "sub_ext_code", type = FieldType.Short)
   @SerializedName("sub_ext_code")
   private String subExtCode;
 
-  @Field(type = FieldType.Short)
+  @Field(name = "terr_ifns_fl", type = FieldType.Short)
   @SerializedName("terr_ifns_fl")
   private String terrIfnsFl;
 
-  @Field(type = FieldType.Short)
+  @Field(name = "terr_ifns_ul", type = FieldType.Short)
   @SerializedName("terr_ifns_ul")
   private String terrIfnsUl;
 
-  @Field(type = FieldType.Short)
+  @Field(name = "ifns_fl", type = FieldType.Short)
   @SerializedName("ifns_fl")
   private String ifnsFl;
 
-  @Field(type = FieldType.Short)
+  @Field(name = "ifns_ul", type = FieldType.Short)
   @SerializedName("ifns_ul")
   private String ifnsUl;
 
-  @Field(type = FieldType.Short)
-  @SerializedName("extr_code")
-  private String extrCode;
+  @Field(name = "house_counts", type = FieldType.Short)
+  private Integer houseCounts;
 
   public List<House> getHouses(String houseNum, String streetGuid) {
     return houses;

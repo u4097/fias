@@ -249,24 +249,31 @@ public class RequestResolver implements GraphQLQueryResolver {
           List<House> houseList = getStreetHouses(it.getFiasId(),
               PageRequest.of(START_PAGE, MAX_PAGE_SIZE));
           if (!houseList.isEmpty()) {
+            it.setHouseCounts(houseList.size());
             it.setHouses(houseList);
+          } else {
+            it.setHouseCounts(0);
           }
+
 
           String fullStreetAddr = "";
 
-/*
+          //Район
           if (!it.getDistrict().isEmpty()) {
             fullStreetAddr += it.getDistrict().toLowerCase();
           }
-*/
+          //Город/нас.пункт
           if (!it.getSettlement().isEmpty()) {
             fullStreetAddr += " " + it.getSettlement().toLowerCase();
           }
+          //Наименование
           if (!it.getName().isEmpty()) {
             fullStreetAddr += " " + it.getName().toLowerCase();
           }
 
-          it.setStreet_address_suggest(fullStreetAddr);
+
+          // Устанавливаем индекс
+          it.setStreet_address_suggest(fullStreetAddr.trim());
           // save
           IndexQuery indexQuery = new IndexQueryBuilder()
               .withId(it.getId())
