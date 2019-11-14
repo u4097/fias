@@ -1,7 +1,5 @@
 package ru.bazis.fias.service;
 
-import com.mapzen.jpostal.AddressExpander;
-import com.mapzen.jpostal.AddressParser;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,10 +22,6 @@ public interface RepositoryService {
   Page<Address> getStreetByRegion(String name, String cityGuid);
 
   Page<Address> getAllStreetByRegion(String region, Pageable page);
-
-  AddressParser getParser();
-
-  AddressExpander getExpander();
 
   ElasticsearchOperations getOperations();
 

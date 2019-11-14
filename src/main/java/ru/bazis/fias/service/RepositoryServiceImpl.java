@@ -1,7 +1,5 @@
 package ru.bazis.fias.service;
 
-import com.mapzen.jpostal.AddressExpander;
-import com.mapzen.jpostal.AddressParser;
 import java.util.Optional;
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +17,6 @@ public class RepositoryServiceImpl implements RepositoryService {
 
   private final AddressRepository addressRepository;
   private final HouseRepository houseRepository;
-  private final AddressParser parser;
-  private final AddressExpander expander;
 
   private ElasticsearchOperations operations;
 
@@ -37,8 +33,6 @@ public class RepositoryServiceImpl implements RepositoryService {
   ) {
     this.addressRepository = addressRepository;
     this.houseRepository = houseRepository;
-    this.parser = AddressParser.getInstance();
-    this.expander = AddressExpander.getInstance();
     this.operations = elasticsearchOperations;
   }
 
@@ -111,11 +105,6 @@ public class RepositoryServiceImpl implements RepositoryService {
         .findByStreetFiasIdAndEndDateAfter(streetGuid, dateNow, pageable);
   }
 
-
-  public AddressParser getParser() {
-    return parser;
-  }
-
   @Override
   public Page<Address> getAddressGuid(String name, Byte level, Pageable unpaged) {
     return addressRepository
@@ -123,10 +112,6 @@ public class RepositoryServiceImpl implements RepositoryService {
             FIAS_STATUS,
             LIVE_STATUS,
             KLADR_STATUS, unpaged);
-  }
-
-  public AddressExpander getExpander() {
-    return expander;
   }
 
   public ElasticsearchOperations getOperations() {

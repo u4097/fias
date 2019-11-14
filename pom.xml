@@ -71,12 +71,6 @@
     </dependency>
 
     <dependency>
-      <groupId>com.mapzen</groupId>
-      <artifactId>jpostal</artifactId>
-      <version>1.0</version>
-    </dependency>
-
-    <dependency>
       <groupId>joda-time</groupId>
       <artifactId>joda-time</artifactId>
       <version>2.10.5</version>

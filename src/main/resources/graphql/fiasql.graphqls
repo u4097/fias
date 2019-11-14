@@ -51,7 +51,7 @@ type AddressRequest {
 
 
 type Query {
-    address(query: String): [Address]
+    address(fiasId: String): [Address]
     street(name: String, parentFiasId: String): [Address]
     city(name:String):[Address]
     expand(address:String):[String]

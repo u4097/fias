@@ -255,7 +255,6 @@ public class RequestResolver implements GraphQLQueryResolver {
             it.setHouseCounts(0);
           }
 
-
           String fullStreetAddr = "";
 
           //Район
@@ -271,7 +270,6 @@ public class RequestResolver implements GraphQLQueryResolver {
             fullStreetAddr += " " + it.getName().toLowerCase();
           }
 
-
           // Устанавливаем индекс
           it.setStreet_address_suggest(fullStreetAddr.trim());
           // save
@@ -282,7 +280,7 @@ public class RequestResolver implements GraphQLQueryResolver {
 
           repositoryService.getOperations().index(indexQuery);
           System.out.println(
-              " REC: " + counter.getAndIncrement() + "    ======================================");
+              " REC: " + counter.getAndIncrement() + "   ======================================");
         }
     );
 
@@ -300,9 +298,10 @@ public class RequestResolver implements GraphQLQueryResolver {
   }
 
 
-  public List<Address> getAddress(String unparsedAddress) throws JSONException {
-
-    return getByStreetFull(unparsedAddress);
+  public List<Address> getAddress(String fiasId) throws JSONException {
+    Page<Address> cityPageable = repositoryService.getByFiasId(fiasId);
+    List<Address> addresses = cityPageable.getContent();
+    return addresses;
   }
 
   @NotNull
@@ -319,43 +318,9 @@ public class RequestResolver implements GraphQLQueryResolver {
     }
     return list;
 
-/*
-    System.out.printf(unparsedAddress);
-    String[] query = unparsedAddress.split("\\s");
-    String houseNumber = query[query.length - 1];
-    Page<Address> addresses = repositoryService.getByStreetFull(unparsedAddress);
-    if (addresses.getContent().isEmpty()) {
-      return Collections.emptyList();
-    }
-    List<Address> addressList = addresses.toList();
-
-    // Save street fiasId
-    String fiasId = addressList.get(0).getFiasId();
-    if (!houseNumber.isEmpty()) {
-      List<House> houseList = getHouses(houseNumber, fiasId);
-      if (!houseList.isEmpty()) {
-//        a.setHouses(houseList);
-      }
-
-    }
-*/
-
-//    return addressList;
   }
 
   private List<Address> templateRequest(String requestString) throws IOException {
-/*
-    val searchSourceBuilder = new SearchSourceBuilder();
-    val searchRequest = new SearchRequest("fias_addr_suggest");
-    val client = new RestHighLevelClient(
-        RestClient.builder(new HttpHost("127.0.0.1", 9200, "http")));
-
-    SuggestionBuilder termSuggestionBuilder =
-        SuggestBuilders.termSuggestion("street_address_suggest").text(request);
-    SuggestBuilder suggestBuilder = new SuggestBuilder();
-    suggestBuilder.addSuggestion("suggest_city", termSuggestionBuilder);
-    searchSourceBuilder.suggest(suggestBuilder);
-*/
 
     val client = new RestHighLevelClient(
         RestClient.builder(new HttpHost("127.0.0.1", 9200, "http")));
@@ -397,38 +362,6 @@ public class RequestResolver implements GraphQLQueryResolver {
     return addressList;
   }
 }
-/*
-    HighlightBuilder highlightBuilder = new HighlightBuilder();
-    HighlightBuilder.Field highlightTitle =
-        new HighlightBuilder.Field("formal_name");
-    highlightBuilder.field(highlightTitle);
-    searchSourceBuilder.highlighter(highlightBuilder);
-*/
-
-/*
-    searchRequest.source(searchSourceBuilder);
-    SearchResponse response = client.search(searchRequest, RequestOptions.DEFAULT);
-    List<Map<String, Object>> mapList = new ArrayList<>();
-    Gson gson = new Gson();
-
-    response.getHits().forEach(it -> {
-      it.getSourceAsMap();
-      mapList.add(it.getSourceAsMap());
-    });
-    List<Address> addressList = new ArrayList<>();
-    mapList.forEach(it -> {
-      try {
-        Optional<Address> address = repositoryService.getOneByRecordId(it.get("ao_id").toString());
-        addressList.add(address.orElseGet(Address::new));
-      } catch (Exception e) {
-        System.out.println(it.toString());
-      }
-    });
-
-    return addressList;
-  }
-*/
-
 
 
 
