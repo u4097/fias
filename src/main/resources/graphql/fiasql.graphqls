@@ -25,7 +25,7 @@ type Address {
 
 type House {
     id: ID!,
-    houseFiasId: String,
+    houseId: String,
     streetFiasId:String,
     regionCode: String,
     postalCode: String,
@@ -54,6 +54,6 @@ type Query {
     address(fiasId: String): [Address]
     street(name: String, parentFiasId: String): [Address]
     city(name:String):[Address]
-    expand(address:String):[String]
+    #    index:Int
 }
 

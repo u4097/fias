@@ -12,7 +12,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import lombok.val;
 import org.apache.http.HttpHost;
@@ -29,10 +28,7 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.elasticsearch.core.query.IndexQuery;
-import org.springframework.data.elasticsearch.core.query.IndexQueryBuilder;
 import org.springframework.stereotype.Component;
 import ru.bazis.fias.model.Address;
 import ru.bazis.fias.model.House;
@@ -43,11 +39,6 @@ public class RequestResolver implements GraphQLQueryResolver {
 
   @Autowired
   RepositoryService repositoryService;
-
-  private final String MOSKOW_CITY = "москва";
-  private final String SANKT_PETERBURG_CITY = "санкт-питербург";
-  private final String SEVASTOPOL_CITY = "севастополь";
-  private final String BAIKONUR_CITY = "байконур";
 
 
   /**
@@ -87,6 +78,10 @@ public class RequestResolver implements GraphQLQueryResolver {
     String name = addressRequest.getCity();
 
     Byte aoLevel = CITY_LEVEL;
+    String MOSKOW_CITY = "москва";
+    String SANKT_PETERBURG_CITY = "санкт-питербург";
+    String SEVASTOPOL_CITY = "севастополь";
+    String BAIKONUR_CITY = "байконур";
     if (name.trim().toLowerCase().equals(MOSKOW_CITY) |
         name.trim().toLowerCase().equals(SANKT_PETERBURG_CITY) |
         name.trim().toLowerCase().equals(SEVASTOPOL_CITY) |
@@ -193,111 +188,93 @@ public class RequestResolver implements GraphQLQueryResolver {
     return streetAddress;
   }
 
-
   /**
-   * Нормализация адресов
-   */
-  public List<String> getExpand(String address) {
+   * Индексация адресов
+   *
+   * @return Кол-во проиндексированных документов
+   *//*
+
+  public AtomicInteger getIndex() {
     final String MORDOVIA_REGION = "13";
     final int START_PAGE = 0;
     final int MAX_PAGE_SIZE = 10_000;
     AtomicInteger counter = new AtomicInteger();
+    AtomicInteger region = new AtomicInteger();
 
-    Page<Address> streets = repositoryService
-        .getAllStreetByRegion(MORDOVIA_REGION, PageRequest.of(START_PAGE, MAX_PAGE_SIZE));
+    for (int i = 1; i < 98; i++) {
+      Page<Address> streets;
+      System.out.println("Регион: " + region);
+      try {
+        streets = repositoryService
+            .getAllStreetByRegion(String.valueOf(i), PageRequest.of(START_PAGE, MAX_PAGE_SIZE));
 
-    streets.getContent().stream().forEach(
-        it -> {
+      } catch (Exception e) {
+        continue;
+      }
 
-          it.setStreetName(it.getName());
-          it.setStreetType(it.getType().toLowerCase());
+      streets.getContent().forEach(
+          it -> {
 
-          // L4: Находим город по parentFiasId
-          Page<Address> cityPageable = repositoryService.getByFiasId(it.getParentFiasId());
-          Address cityAddress = cityPageable.getContent().get(0);
-          it.setSettlement(cityAddress.getName());
-          if (cityAddress.getCentStatus() != null && !cityAddress.getCentStatus().isEmpty()) {
-            switch (cityAddress.getCentStatus()) {
-              case "0":
-                it.setSettlementCentStatus("не определен");
-                break;
-              case "1":
-                it.setSettlementCentStatus("центр района");
-                break;
-              case "2":
-                it.setSettlementCentStatus("центр региона");
-                break;
-              case "3":
-                it.setSettlementCentStatus("центр района и региона");
-                break;
-              case "4":
-                it.setSettlementCentStatus("центральный район региона");
-                break;
-              default:
-                it.setSettlementCentStatus("не определен");
+            it.setStreetName(it.getName());
+            it.setStreetType(it.getType().toLowerCase());
+
+            // L4: Находим город по parentFiasId
+            Page<Address> cityPageable = repositoryService.getByFiasId(it.getParentFiasId());
+            Address cityAddress = cityPageable.getContent().get(0);
+            it.setSettlement(cityAddress.getName());
+            it.setSettlementType(cityAddress.getType().toLowerCase());
+
+            // L1: Находим Регион
+            Page<Address> cityParent = repositoryService.getByFiasId(cityAddress.getParentFiasId());
+            Address cityParentsAddress = cityParent.getContent().get(0);
+            it.setDistrict(cityParentsAddress.getName());
+            it.setDistrictType(cityParentsAddress.getType().toLowerCase());
+
+            // L8: Находим дома
+            List<House> houseList = getStreetHouses(it.getFiasId(),
+                PageRequest.of(START_PAGE, MAX_PAGE_SIZE));
+            if (!houseList.isEmpty()) {
+              it.setHouseCounts(houseList.size());
+              it.setHouses(houseList);
+            } else {
+              it.setHouseCounts(0);
             }
 
+            String fullStreetAddr = "";
+
+            //Район
+            if (!it.getDistrict().isEmpty()) {
+              fullStreetAddr += it.getDistrict().toLowerCase();
+            }
+            //Город/нас.пункт
+            if (!it.getSettlement().isEmpty()) {
+              fullStreetAddr += " " + it.getSettlement().toLowerCase();
+            }
+            //Наименование
+            if (!it.getName().isEmpty()) {
+              fullStreetAddr += " " + it.getName().toLowerCase();
+            }
+
+            // Устанавливаем индекс
+            it.setStreet_address_suggest(fullStreetAddr.trim());
+            // save
+            IndexQuery indexQuery = new IndexQueryBuilder()
+                .withId(it.getId())
+                .withObject(it)
+                .build();
+
+            repositoryService.getOperations().index(indexQuery);
+            counter.getAndIncrement();
           }
-
-          // L1: Находим Регион
-          Page<Address> cityParent = repositoryService.getByFiasId(cityAddress.getParentFiasId());
-          Address cityParentsAddress = cityParent.getContent().get(0);
-          it.setDistrict(cityParentsAddress.getName());
-          it.setDistrictType(cityParentsAddress.getType().toLowerCase());
-
-          // L8: Находим дома
-          List<House> houseList = getStreetHouses(it.getFiasId(),
-              PageRequest.of(START_PAGE, MAX_PAGE_SIZE));
-          if (!houseList.isEmpty()) {
-            it.setHouseCounts(houseList.size());
-            it.setHouses(houseList);
-          } else {
-            it.setHouseCounts(0);
-          }
-
-          String fullStreetAddr = "";
-
-          //Район
-          if (!it.getDistrict().isEmpty()) {
-            fullStreetAddr += it.getDistrict().toLowerCase();
-          }
-          //Город/нас.пункт
-          if (!it.getSettlement().isEmpty()) {
-            fullStreetAddr += " " + it.getSettlement().toLowerCase();
-          }
-          //Наименование
-          if (!it.getName().isEmpty()) {
-            fullStreetAddr += " " + it.getName().toLowerCase();
-          }
-
-          // Устанавливаем индекс
-          it.setStreet_address_suggest(fullStreetAddr.trim());
-          // save
-          IndexQuery indexQuery = new IndexQueryBuilder()
-              .withId(it.getId())
-              .withObject(it)
-              .build();
-
-          repositoryService.getOperations().index(indexQuery);
-          System.out.println(
-              " REC: " + counter.getAndIncrement() + "   ======================================");
-        }
-    );
-
-    List<String> expandedList = new ArrayList<>();
-    for (int i = 0; i < 500; i++) {
-      expandedList.add(
-          streets.getContent().get(i).getDistrict().toLowerCase() + " " +
-              streets.getContent().get(i).getSettlement().toLowerCase() + " " +
-              streets.getContent().get(i).getType().toLowerCase() + " " +
-              streets.getContent().get(i).getName().toLowerCase()
       );
+
+      System.out.println("Регион: " + region.getAndIncrement());
+
     }
 
-    return expandedList;
+    return counter;
   }
-
-
+*/
   public List<Address> getAddress(String fiasId) throws JSONException {
     Page<Address> cityPageable = repositoryService.getByFiasId(fiasId);
     List<Address> addresses = cityPageable.getContent();
@@ -362,8 +339,3 @@ public class RequestResolver implements GraphQLQueryResolver {
     return addressList;
   }
 }
-
-
-
-
-

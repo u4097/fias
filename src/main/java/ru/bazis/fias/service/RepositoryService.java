@@ -23,6 +23,8 @@ public interface RepositoryService {
 
   Page<Address> getAllStreetByRegion(String region, Pageable page);
 
+  Page<Address> getAllStreet(Pageable page);
+
   ElasticsearchOperations getOperations();
 
   Page<Address> getAddressGuid(String name, Byte level, Pageable unpaged);

@@ -1,18 +1,17 @@
 package ru.bazis.fias.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.annotations.SerializedName;
 import java.util.List;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.elasticsearch.annotations.CompletionField;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
-@Document(indexName = "fias_addr_suggest", type = "_doc")
+@Document(indexName = "address", type = "_doc")
 @Data
-@TypeAlias("_doc")
 public class Address {
 
   @Id
@@ -60,7 +59,7 @@ public class Address {
   private String fiasId = "";
 
   // КЛАДР ID
-  @Field(name = "plain_code", type = FieldType.Long)
+  @Field(name = "plain_code", type = FieldType.Keyword)
   @SerializedName("plain_code")
   private String kladrId = "";
 
@@ -70,12 +69,12 @@ public class Address {
   private String parentFiasId = "";
 
   // Уровень адресного объекта ( 1 -регион, 3 - район, 4 - город, 5 - район города, 6 - нас. пункт, 7 - улица)
-  @Field(name = "ao_level", type = FieldType.Byte)
+  @Field(name = "ao_level", type = FieldType.Integer)
   @SerializedName("ao_level")
   private Byte level;
 
   // Формальное наименование адресного объекта (для поиска)
-  @Field(name = "formal_name", type = FieldType.Text)
+  @Field(name = "formal_name", type = FieldType.Keyword)
   @SerializedName("formal_name")
   private String name = "";
 
@@ -85,38 +84,38 @@ public class Address {
   private String type = "";
 
   // Статус адреса на текущую дату (0 - не действующий, 1 - действущий)
-  @Field(name = "live_status", type = FieldType.Byte)
+  @Field(name = "live_status", type = FieldType.Integer)
   @SerializedName("live_status")
   private Byte liveStatus;
 
   // Статус актульности адреса по КЛАДР
   // (0 - актуальный, 1-51 - адрес не актуальный, 99 - адрес удален.)
-  @Field(name = "curr_status", type = FieldType.Byte)
+  @Field(name = "curr_status", type = FieldType.Integer)
   @SerializedName("curr_status")
   private Byte kladrStatus;
 
   // Статус актульности адреса по ФИАС
-  @Field(name = "act_status", type = FieldType.Byte)
+  @Field(name = "act_status", type = FieldType.Keyword)
   @SerializedName("act_status")
   private Byte fiasStatus;
 
   // FIAS: Код региона (Субъекта РФ)
-  @Field(name = "region_code", type = FieldType.Byte)
+  @Field(name = "region_code", type = FieldType.Integer)
   @SerializedName("region_code")
   private String regionCode = "";
 
   // FIAS: Код города
-  @Field(name = "city_code", type = FieldType.Short)
+  @Field(name = "city_code", type = FieldType.Integer)
   @SerializedName("city_code")
   private String cityCode = "";
 
   // FIAS: Код населенного пункта
-  @Field(name = "place_code", type = FieldType.Short)
+  @Field(name = "place_code", type = FieldType.Integer)
   @SerializedName("place_code")
   private String placeCode = "";
 
   // FIAS: Код улицы
-  @Field(name = "street_code", type = FieldType.Short)
+  @Field(name = "street_code", type = FieldType.Integer)
   @SerializedName("street_code")
   private String streetCode = "";
 
@@ -140,11 +139,11 @@ public class Address {
   List<House> houses;
 
   // AutoCode Код автономной области
-  @Field(name = "auto_code", type = FieldType.Short)
+  @Field(name = "auto_code", type = FieldType.Integer)
   @SerializedName("auto_code")
   private String autoCode;
 
-  @Field(name = "city_ar_code", type = FieldType.Short)
+  @Field(name = "city_ar_code", type = FieldType.Integer)
   @SerializedName("city_ar_code")
   private String cityArCode;
 
@@ -156,15 +155,11 @@ public class Address {
   @SerializedName("cent_status")
   private String centStatus;
 
-  @Field(type = FieldType.Byte)
-  @SerializedName("settlement_cent_status")
-  private String settlementCentStatus;
-
-  @Field(name = "code", type = FieldType.Long)
+  @Field(name = "code", type = FieldType.Keyword)
   @SerializedName("code")
   private String code;
 
-  @Field(name = "div_type", type = FieldType.Short)
+  @Field(name = "div_type", type = FieldType.Integer)
   @SerializedName("div_type")
   private String divType;
 
@@ -172,23 +167,23 @@ public class Address {
   @SerializedName("norm_doc")
   private String normDoc;
 
-  @Field(name = "okato", type = FieldType.Long)
+  @Field(name = "okato", type = FieldType.Keyword)
   @SerializedName("okato")
   private String okato;
 
-  @Field(name = "oktmo", type = FieldType.Long)
+  @Field(name = "oktmo", type = FieldType.Keyword)
   @SerializedName("oktmo")
   private String oktmo;
 
-  @Field(name = "oper_status", type = FieldType.Byte)
+  @Field(name = "oper_status", type = FieldType.Integer)
   @SerializedName("oper_status")
   private String operStatus;
 
-  @Field(name = "plan_code", type = FieldType.Short)
+  @Field(name = "plan_code", type = FieldType.Integer)
   @SerializedName("plan_code")
   private String planCode;
 
-  @Field(name = "postal_code", type = FieldType.Long)
+  @Field(name = "postal_code", type = FieldType.Keyword)
   @SerializedName("postal_code")
   private String postalCode;
 
@@ -196,31 +191,31 @@ public class Address {
   @SerializedName("prev_id")
   private String prevId;
 
-  @Field(name = "extr_code", type = FieldType.Short)
+  @Field(name = "extr_code", type = FieldType.Integer)
   @SerializedName("extr_code")
   private String extrCode;
 
-  @Field(name = "sub_ext_code", type = FieldType.Short)
+  @Field(name = "sub_ext_code", type = FieldType.Integer)
   @SerializedName("sub_ext_code")
   private String subExtCode;
 
-  @Field(name = "terr_ifns_fl", type = FieldType.Short)
+  @Field(name = "terr_ifns_fl", type = FieldType.Keyword)
   @SerializedName("terr_ifns_fl")
   private String terrIfnsFl;
 
-  @Field(name = "terr_ifns_ul", type = FieldType.Short)
+  @Field(name = "terr_ifns_ul", type = FieldType.Keyword)
   @SerializedName("terr_ifns_ul")
   private String terrIfnsUl;
 
-  @Field(name = "ifns_fl", type = FieldType.Short)
+  @Field(name = "ifns_fl", type = FieldType.Keyword)
   @SerializedName("ifns_fl")
   private String ifnsFl;
 
-  @Field(name = "ifns_ul", type = FieldType.Short)
+  @Field(name = "ifns_ul", type = FieldType.Keyword)
   @SerializedName("ifns_ul")
   private String ifnsUl;
 
-  @Field(name = "house_counts", type = FieldType.Short)
+  @JsonProperty("house_counts")
   private Integer houseCounts;
 
   public List<House> getHouses(String houseNum, String streetGuid) {

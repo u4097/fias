@@ -8,7 +8,7 @@ import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
-@Document(indexName = "fias_houses", type = "_doc")
+@Document(indexName = "houses", type = "_doc")
 @Data
 @TypeAlias("_doc")
 public class House {
@@ -19,7 +19,7 @@ public class House {
   // ID записи
   @Field(name = "house_id", type = FieldType.Keyword)
   @SerializedName("house_id")
-  private String houseFiasId;
+  private String houseId;
 
   // HOUSE GUID
   @Field(name = "house_guid", type = FieldType.Keyword)
@@ -76,7 +76,7 @@ public class House {
   private String updateDate;
 
   // KLADR code
-  @Field(name = "counter", type = FieldType.Long)
+  @Field(name = "counter", type = FieldType.Short)
   @SerializedName("counter")
   private Long counter;
 

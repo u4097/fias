@@ -69,4 +69,11 @@ public interface AddressRepository extends ElasticsearchRepository<Address, Stri
       Byte fiasStatus, Byte liveStatus,
       Byte kladrStatus, Pageable pageable);
 
+  /**
+   *  Search by: Level
+   */
+  Page<Address> findByLevelAndFiasStatusAndLiveStatusAndKladrStatus(Byte level,
+      Byte fiasStatus, Byte liveStatus,
+      Byte kladrStatus, Pageable pageable);
+
 }

@@ -939,7 +939,12 @@ POST _reindex
     "index": "region"
   },
   "script": {
-    "source": "ctx._source.region_fias_id = ctx._source.remove(\"ao_guid\");ctx._source.region_kladr_id = ctx._source.remove(\"code\");ctx._source.region_type = ctx._source.short_name;ctx._source.region = ctx._source.formal_name;ctx._source.region_with_type=ctx._source.remove(\"short_name\") + ' ' + ctx._source.remove(\"formal_name\")"
+    "source":
+   "ctx._source.region_fias_id = ctx._source.remove(\"ao_guid\");
+    ctx._source.region_kladr_id = ctx._source.remove(\"code\");
+    ctx._source.region_type = ctx._source.short_name;
+    ctx._source.region = ctx._source.formal_name;
+    ctx._source.region_with_type=ctx._source.remove(\"short_name\") + ' ' + ctx._source.remove(\"formal_name\")"
   }
 }
 GET region/_refresh

@@ -88,6 +88,14 @@ public class RepositoryServiceImpl implements RepositoryService {
   }
 
   @Override
+  public Page<Address> getAllStreet(Pageable page) {
+    return addressRepository
+        .findByLevelAndFiasStatusAndLiveStatusAndKladrStatus(STREET_LEVEL,
+            FIAS_STATUS,
+            LIVE_STATUS, KLADR_STATUS, page);
+  }
+
+  @Override
   public Page<House> getHouse(String houseNumber, String streetGuid, Pageable unPaged) {
 
     LocalDate date = new LocalDate();
