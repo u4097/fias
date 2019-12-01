@@ -14,66 +14,67 @@ public interface AddressRepository extends ElasticsearchRepository<Address, Stri
   Optional<Address> findByRecordId(String recordId);
 
   /**
-   *  Search by: FiasId
+   * Search by: FiasId
    */
-  Page<Address> findByFiasIdAndFiasStatusAndLiveStatusAndKladrStatus(String aoGuid,
-      Byte actStatus, Byte liveStatus,
-      Byte currStatus,
-      Pageable pageable);
+  Page<Address> findByAoGUIDAndActStatusAndLiveStatusAndCurrentStatus(String aoGUID,
+      Integer actStatus, Integer liveStatus, Integer currentStatus, Pageable pageable);
 
   /**
-   *  Search by: Name
+   * Search by: Name
    */
-  Page<Address> findByNameAndFiasStatusAndLiveStatusAndKladrStatus(String name,
-      Byte actualStatus, Byte liveStatus,
-      Byte currentStatus, Pageable pageable);
+  Page<Address> findByNameAndActStatusAndLiveStatusAndCurrentStatus(String name, Integer actStatus,
+      Integer liveStatus, Integer currentStatus, Pageable pageable);
 
-/*
-  */
+  /*
+   */
 /**
-   *  Search by: Street by Full address text (Region City Street House)
-   *//*
+ *  Search by: Street by Full address text (Region City Street House)
+ *//*
 
-  Page<Address> findByNameAndFiasStatusAndLiveStatusAndKladrStatus(String name,
+  Page<Address> findByNameAndActStatusAndLiveStatusAndCurrentStatus(String name,
       Byte actualStatus, Byte liveStatus,
       Byte currentStatus, Pageable pageable);
 */
 
 
   /**
-   *  Search by: Name and Level
+   * Search by: Name and AoLevel
    */
-  Page<Address> findByNameAndLevelAndFiasStatusAndLiveStatusAndKladrStatus(String name, Byte level,
-      Byte actualStatus, Byte liveStatus,
-      Byte currentStatus, Pageable pageable);
+  Page<Address> findByNameAndAoLevelAndActStatusAndLiveStatusAndCurrentStatus(String name,
+      Byte level,
+      Integer actualStatus, Integer liveStatus,
+      Integer currentStatus, Pageable pageable);
 
   /**
-   *  Search by: Name and  ParentFiasId
+   * Search by: Name and  ParentGUID
    */
-  Page<Address> findByNameAndParentFiasIdAndFiasStatusAndLiveStatusAndKladrStatus(String name, String guid,
-      Byte fiasStatus, Byte liveStatus,
-      Byte kladrStatus, Pageable pageable);
+  Page<Address> findByNameAndParentGUIDAndActStatusAndLiveStatusAndCurrentStatus(String name,
+      String guid,
+      Integer fiasStatus, Integer liveStatus,
+      Integer kladrStatus, Pageable pageable);
 
 
   /**
-   *  Search by: Name and Region
+   * Search by: Name and Region
    */
-  Page<Address> findByNameAndRegionCodeAndFiasStatusAndLiveStatusAndKladrStatus(String name, String region,
-      Byte fiasStatus, Byte liveStatus,
-      Byte kladrStatus, Pageable pageable);
+  Page<Address> findByNameAndRegionCodeAndActStatusAndLiveStatusAndCurrentStatus(String name,
+      String region,
+      Integer fiasStatus, Integer liveStatus,
+      Integer kladrStatus, Pageable pageable);
 
   /**
-   *  Search by: Level and Region
+   * Search by: AoLevel and Region
    */
-  Page<Address> findByLevelAndRegionCodeAndFiasStatusAndLiveStatusAndKladrStatus(Byte level, String region,
-      Byte fiasStatus, Byte liveStatus,
-      Byte kladrStatus, Pageable pageable);
+  Page<Address> findByAoLevelAndRegionCodeAndActStatusAndLiveStatusAndCurrentStatus(Byte level,
+      String region,
+      Integer fiasStatus, Integer liveStatus,
+      Integer kladrStatus, Pageable pageable);
 
   /**
-   *  Search by: Level
+   * Search by: AoLevel
    */
-  Page<Address> findByLevelAndFiasStatusAndLiveStatusAndKladrStatus(Byte level,
-      Byte fiasStatus, Byte liveStatus,
-      Byte kladrStatus, Pageable pageable);
+  Page<Address> findByAoLevelAndActStatusAndLiveStatusAndCurrentStatus(Byte level,
+      Integer fiasStatus, Integer liveStatus,
+      Integer kladrStatus, Pageable pageable);
 
 }

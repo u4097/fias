@@ -10,15 +10,7 @@ public class Application {
   public static void main(String[] args) {
     SpringApplication.run(Application.class, args);
 
-
   }
 
-
-/*
-  @Bean
-  Instrumentation instrumentation() {
-    return new TracingInstrumentation();
-  }
-*/
 
 }

@@ -1,10 +1,10 @@
 type Address {
     id: ID!,
     recordId: String,
-    fiasId: String,
-    kladrId: String,
+    aoGUID:String,
+    plainCode: String,
     street_address_suggest: String,
-    parentFiasId: String,
+    parentGUID: String,
     settlement: String,
     streetName:String,
     name: String,
@@ -13,13 +13,13 @@ type Address {
     district: String,
     cityCode: String,
     placeCode: String,
-    level: Int,
+    aoLevel: Int,
     startDate: String,
     updateDate: String,
     endDate: String,
-    fiasStatus: Int,
+    actStatus: Int,
     liveStatus: Int,
-    kladrStatus: Int,
+    currentStatus:Int,
     houses(houseNum: String, streetGuid: String): [House],
 }
 
@@ -51,8 +51,8 @@ type AddressRequest {
 
 
 type Query {
-    address(fiasId: String): [Address]
-    street(name: String, parentFiasId: String): [Address]
+    address(aoGUID: String): [Address]
+    street(name: String, parentGUID: String): [Address]
     city(name:String):[Address]
     #    index:Int
 }

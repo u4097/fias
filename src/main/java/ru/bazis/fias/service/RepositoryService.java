@@ -11,7 +11,7 @@ public interface RepositoryService {
 
   Optional<Address> getOneByRecordId(String fiasId);
 
-  Page<Address> getByFiasId(String guid);
+  Page<Address> getByAoGUID(String guid);
 
   Page<Address> getByName(String name);
 

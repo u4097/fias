@@ -5,7 +5,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.bazis.fias.config.RestClientConfig;
@@ -24,7 +23,7 @@ public class RepositoryTest {
   @Test
   public void givenFiasService_whenPassSomeDocId_thenReturnAddress() {
     Page<Address> address = repositoryService
-        .getByFiasId("bbd6b0fd-f09e-4a0a-8a85-670e0103427d");
+        .getByAoGUID("bbd6b0fd-f09e-4a0a-8a85-670e0103427d");
     Assert.assertEquals(3L, address.getTotalElements());
   }
 

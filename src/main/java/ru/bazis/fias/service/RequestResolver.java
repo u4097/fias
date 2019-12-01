@@ -46,7 +46,7 @@ public class RequestResolver implements GraphQLQueryResolver {
    */
   public List<Address> getAddressByFiasId(final String guid) {
     Page<Address> addresses = repositoryService
-        .getByFiasId(guid);
+        .getByAoGUID(guid);
 
     if (addresses.getTotalElements() == 0) {
       throw new IllegalStateException(
@@ -109,17 +109,17 @@ public class RequestResolver implements GraphQLQueryResolver {
   /**
    * Street by parent GUID and Name
    */
-  public List<Address> getStreet(String name, String parentFiasId) {
+  public List<Address> getStreet(String name, String parentGUID) {
 
     Page<Address> addresses = repositoryService
-        .getStreet(name, parentFiasId, Pageable.unpaged());
+        .getStreet(name, parentGUID, Pageable.unpaged());
 
     if (addresses.getTotalElements() == 0) {
       return Collections.emptyList();
 /*
       throw new IllegalStateException(
           "|============| FAIL TO GET STREET BY PARENT GUID: ( TOTAL ELEMENT = 0) STREET NAME: "
-              + name + " PARENT GUID: " + parentFiasId);
+              + name + " PARENT GUID: " + parentGUID);
 */
     }
     return addresses.stream()
@@ -169,7 +169,7 @@ public class RequestResolver implements GraphQLQueryResolver {
     Address city = cityAddress.stream().collect(toSingleton());
     city.setSettlement(city.getName());
 
-    List<Address> streetAddress = getStreet(addressRequest.getRoad(), city.getFiasId());
+    List<Address> streetAddress = getStreet(addressRequest.getRoad(), city.getAoGUID());
     if (streetAddress.isEmpty()) {
       return cityAddress;
     }
@@ -179,7 +179,7 @@ public class RequestResolver implements GraphQLQueryResolver {
       streetAddress.forEach(it -> {
         it.setStreetName(it.getName());
         it.setSettlement(city.getName());
-        List<House> houseList = getHouses(addressRequest.getHouse_number(), it.getFiasId());
+        List<House> houseList = getHouses(addressRequest.getHouse_number(), it.getAoGUID());
         if (!houseList.isEmpty()) {
           it.setHouses(houseList);
         }
@@ -218,7 +218,7 @@ public class RequestResolver implements GraphQLQueryResolver {
             it.setStreetName(it.getName());
             it.setStreetType(it.getType().toLowerCase());
 
-            // L4: Находим город по parentFiasId
+            // L4: Находим город по parentGUID
             Page<Address> cityPageable = repositoryService.getByFiasId(it.getParentFiasId());
             Address cityAddress = cityPageable.getContent().get(0);
             it.setSettlement(cityAddress.getName());
@@ -276,7 +276,7 @@ public class RequestResolver implements GraphQLQueryResolver {
   }
 */
   public List<Address> getAddress(String fiasId) throws JSONException {
-    Page<Address> cityPageable = repositoryService.getByFiasId(fiasId);
+    Page<Address> cityPageable = repositoryService.getByAoGUID(fiasId);
     List<Address> addresses = cityPageable.getContent();
     return addresses;
   }

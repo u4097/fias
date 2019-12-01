@@ -20,9 +20,9 @@ public class RepositoryServiceImpl implements RepositoryService {
 
   private ElasticsearchOperations operations;
 
-  private static final Byte KLADR_STATUS = 0;
-  private static final Byte LIVE_STATUS = 1;
-  private static final Byte FIAS_STATUS = 1;
+  private static final Integer KLADR_STATUS = 0;
+  private static final Integer LIVE_STATUS = 1;
+  private static final Integer FIAS_STATUS = 1;
   static final Byte CITY_LEVEL = 4;
   static final Byte REGION_LEVEL = 1;
   private static final Byte STREET_LEVEL = 7;
@@ -43,30 +43,33 @@ public class RepositoryServiceImpl implements RepositoryService {
 
 
   @Override
-  public Page<Address> getByFiasId(String guid) {
+  public Page<Address> getByAoGUID(String guid) {
     return addressRepository
-        .findByFiasIdAndFiasStatusAndLiveStatusAndKladrStatus(guid, FIAS_STATUS,
-            LIVE_STATUS, KLADR_STATUS, Pageable.unpaged());
+        .findByAoGUIDAndActStatusAndLiveStatusAndCurrentStatus
+            (guid, FIAS_STATUS,
+                LIVE_STATUS, KLADR_STATUS, Pageable.unpaged());
   }
 
   @Override
   public Page<Address> getByName(String name) {
     return addressRepository
-        .findByNameAndFiasStatusAndLiveStatusAndKladrStatus(name, FIAS_STATUS,
-            LIVE_STATUS, KLADR_STATUS, Pageable.unpaged());
+        .findByNameAndActStatusAndLiveStatusAndCurrentStatus
+            (name, FIAS_STATUS,
+                LIVE_STATUS, KLADR_STATUS, Pageable.unpaged());
   }
 
   @Override
   public Page<Address> getByStreetFull(String name) {
     return addressRepository
-        .findByNameAndFiasStatusAndLiveStatusAndKladrStatus(name, FIAS_STATUS,
-            LIVE_STATUS, KLADR_STATUS, Pageable.unpaged());
+        .findByNameAndActStatusAndLiveStatusAndCurrentStatus
+            (name, FIAS_STATUS,
+                LIVE_STATUS, KLADR_STATUS, Pageable.unpaged());
   }
 
   @Override
   public Page<Address> getStreet(String name, String cityGuid, Pageable unPaged) {
     return addressRepository
-        .findByNameAndParentFiasIdAndFiasStatusAndLiveStatusAndKladrStatus(name, cityGuid,
+        .findByNameAndParentGUIDAndActStatusAndLiveStatusAndCurrentStatus(name, cityGuid,
             FIAS_STATUS,
             LIVE_STATUS, KLADR_STATUS, unPaged);
   }
@@ -74,7 +77,7 @@ public class RepositoryServiceImpl implements RepositoryService {
   @Override
   public Page<Address> getStreetByRegion(String name, String region) {
     return addressRepository
-        .findByNameAndRegionCodeAndFiasStatusAndLiveStatusAndKladrStatus(name, region,
+        .findByNameAndRegionCodeAndActStatusAndLiveStatusAndCurrentStatus(name, region,
             FIAS_STATUS,
             LIVE_STATUS, KLADR_STATUS, Pageable.unpaged());
   }
@@ -82,7 +85,7 @@ public class RepositoryServiceImpl implements RepositoryService {
   @Override
   public Page<Address> getAllStreetByRegion(String region, Pageable page) {
     return addressRepository
-        .findByLevelAndRegionCodeAndFiasStatusAndLiveStatusAndKladrStatus(STREET_LEVEL, region,
+        .findByAoLevelAndRegionCodeAndActStatusAndLiveStatusAndCurrentStatus(STREET_LEVEL, region,
             FIAS_STATUS,
             LIVE_STATUS, KLADR_STATUS, page);
   }
@@ -90,7 +93,7 @@ public class RepositoryServiceImpl implements RepositoryService {
   @Override
   public Page<Address> getAllStreet(Pageable page) {
     return addressRepository
-        .findByLevelAndFiasStatusAndLiveStatusAndKladrStatus(STREET_LEVEL,
+        .findByAoLevelAndActStatusAndLiveStatusAndCurrentStatus(STREET_LEVEL,
             FIAS_STATUS,
             LIVE_STATUS, KLADR_STATUS, page);
   }
@@ -116,7 +119,7 @@ public class RepositoryServiceImpl implements RepositoryService {
   @Override
   public Page<Address> getAddressGuid(String name, Byte level, Pageable unpaged) {
     return addressRepository
-        .findByNameAndLevelAndFiasStatusAndLiveStatusAndKladrStatus(name, level,
+        .findByNameAndAoLevelAndActStatusAndLiveStatusAndCurrentStatus(name, level,
             FIAS_STATUS,
             LIVE_STATUS,
             KLADR_STATUS, unpaged);

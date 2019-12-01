@@ -7,10 +7,10 @@ import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
-@Document(indexName = "houses", type = "_doc")
+//@Document(indexName = "houses", type = "_doc")
 @Data
-@TypeAlias("_doc")
-public class House {
+//@TypeAlias("_doc")
+public class HouseMordovia {
 
   @Id
   private String id;
@@ -28,12 +28,12 @@ public class House {
   private String streetFiasId;
 
   // FIAS: Код региона (Субъекта РФ)
-  @Field(name = "region_code", type = FieldType.Keyword)
+  @Field(name = "region_code", type = FieldType.Byte)
   private String regionCode;
 
   // Почтовый индекс
-  @Field(name = "postal_code", type = FieldType.Keyword)
-  private String postalCode;
+  @Field(name = "postal_code", type = FieldType.Long)
+  private Long postalCode;
 
   // Номер дома
   @Field(name = "house_num", type = FieldType.Keyword)
@@ -64,32 +64,32 @@ public class House {
   private String updateDate;
 
   // KLADR code
-  @Field(name = "counter", type = FieldType.Keyword)
-  private String counter;
+  @Field(name = "counter", type = FieldType.Short)
+  private Long counter;
 
-  //OKATO
-  @Field(name = "okato", type = FieldType.Keyword)
-  private String okato;
+//  //OKATO
+//  @Field(name = "okato", type = FieldType.Long)
+//  private Long okato;
 
   //OKTMO
-  @Field(name = "oktmo", type = FieldType.Keyword)
-  private String oktmo;
+  @Field(name = "oktmo", type = FieldType.Long)
+  private Long oktmo;
 
   //IFNS FL
-  @Field(name = "ifns_fl", type = FieldType.Keyword)
-  private String ifnsFl;
+  @Field(name = "ifns_fl", type = FieldType.Short)
+  private Short ifnsFl;
 
   //IFNS UL
-  @Field(name = "ifns_ul", type = FieldType.Keyword)
-  private String ifnsUl;
+  @Field(name = "ifns_ul", type = FieldType.Short)
+  private Short ifnsUl;
 
   //TERR IFNS UL
-  @Field(name = "terr_ifns_ul", type = FieldType.Keyword)
-  private String terrIfnsUl;
+  @Field(name = "terr_ifns_ul", type = FieldType.Short)
+  private Short terrIfnsUl;
 
   //TERR IFNS FL
-  @Field(name = "terr_ifns_fl", type = FieldType.Keyword)
-  private String terrIfnsFl;
+  @Field(name = "terr_ifns_fl", type = FieldType.Short)
+  private Short terrIfnsFl;
 
   //ES STATUS
   @Field(name = "est_status", type = FieldType.Byte)
