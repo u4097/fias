@@ -17,7 +17,8 @@ public class RestoreTask {
     private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 
     //@Scheduled(cron = "0 * * * * *")
-    @Scheduled(cron = "0 20 3 * * 2,5")
+    //@Scheduled(cron = "0 20 3 * * 2,5")
+    @Scheduled(cron = "0 50 12 * * *")
     //@Scheduled(cron = "0 * * * * *")
     public void updateTask() {
         logger.info("Restore Task :: Started Time - {}", dateTimeFormatter.format(LocalDateTime.now()));
@@ -43,11 +44,11 @@ public class RestoreTask {
 
 	    interp.exec("System.out.println('Starting restore task...')");
 	    interp.exec("from fiases.snapshot import register,restore");
-	    interp.exec("System.out.println('register...')");
+	    interp.exec("System.out.println('1.register')");
 	    interp.exec("register()");
-	    interp.exec("System.out.println('restore...')");
+	    interp.exec("System.out.println('2.restore')");
 	    interp.exec("restore()");
-	    interp.exec("System.out.println('finish')");
+	    //interp.exec("System.out.println('finish')");
         }
     }
 }
