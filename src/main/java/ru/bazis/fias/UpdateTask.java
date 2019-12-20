@@ -14,7 +14,7 @@ public class UpdateTask {
     private static final Logger logger = LoggerFactory.getLogger(UpdateTask.class);
     private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 
-    //    @Scheduled(cron = "0 * * * * *")
+    //@Scheduled(cron = "0 * * * * *")
     //@Scheduled(cron = "0 0 21 * * 2,5")
     @Scheduled(cron = "0 45 9 * * *")
     public void updateTask() {

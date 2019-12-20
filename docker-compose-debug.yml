@@ -7,6 +7,7 @@ services:
     image: oleg2019/fias-server
     #working_dir: /app
     #volumes:
+    #- "/etc/localtime:/etc/localtime:ro"
     #- .:/app
     #- maven:/root/.m2
     expose:
@@ -15,8 +16,8 @@ services:
     ports:
       - 8080:8080
       - 8000:8000
-    #networks:
-      #- es_elastic
+    networks:
+      - es_elastic
     command: java -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000 -jar fias-0.0.1.jar 
     #command: mvn clean spring-boot:run
 
@@ -25,6 +26,6 @@ services:
   #maven:
     #driver: local
 
-#networks:
-  #es_elastic:
-      #external: true
+networks:
+  es_elastic:
+      external: true
