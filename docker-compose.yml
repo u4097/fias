@@ -1,0 +1,25 @@
+version: '3.7'
+services:
+  fias:
+    container_name: fias-server
+    restart: always
+    build: 
+            context: .
+            args:
+              - FIASES_VER=1.8.103
+    image: fias/fias-server
+    environment: 
+      - restore_on_start=1
+      - update_cron_exr=0 0 0 * * 2,5
+    expose:
+    - 8080
+    ports:
+      - 8080:8080
+    networks:
+      - es_elastic
+    command: java -jar fias-0.0.1.jar 
+
+
+networks:
+  es_elastic:
+      external: true

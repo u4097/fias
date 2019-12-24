@@ -4,3 +4,5 @@
 target/*
 .mvn/
 mvn*
+*java.swp
+*.swp

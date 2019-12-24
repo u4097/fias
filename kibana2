@@ -1,0 +1,935 @@
+GET fias_addr/_search
+{
+  "query": {"bool": {"must": [
+    {"match": {
+      "": "TEXT"
+    }}
+  ]}}
+}
+
+GET fias_addr_suggest/_search
+{
+  "query": {"exists": {"field": "ifns_fl"}}
+}
+
+DELETE fias_addr
+
+GET fias_addr
+
+
+
+GET fias_addr_suggest_tmp/_refresh
+
+GET fias_addr_suggest/_search
+{
+  "query": {"exists": {"field": "settlement_cent_status"}
+}}
+
+#DELETE fias_addr_suggest_tmp
+
+
+
+GET fias_address/_mapping
+
+GET fias_addr_suggest/_refresh
+GET fias_addr_suggest/_search
+{
+  "query": {"exists": {"field": "settlement"}}
+}
+
+GET fias_addr_suggest/_search
+{
+  "size": 5, 
+  "query": {"match": {
+    "street_address_suggest": "сущ"
+  }}
+}
+
+# address
+PUT fias_addr_suggest/
+{
+  "settings": {
+    "codec": "best_compression",
+    "number_of_shards": 1,
+    "number_of_replicas": 0,
+    "index.refresh_interval": "-1",
+   "index": {
+      "requests.cache.enable": true,
+      "analysis": {
+        "filter": {},
+        "analyzer": {
+          "analyzer_keyword": {
+            "tokenizer": "keyword",
+            "filter": "lowercase"
+          },
+          "edge_ngram_analyzer": {
+            "filter": [
+              "lowercase"
+            ],
+            "tokenizer": "edge_ngram_tokenizer"
+          }
+        },
+        "tokenizer": {
+          "edge_ngram_tokenizer": {
+            "type": "edge_ngram",
+            "min_gram": 2,
+            "max_gram": 5,
+            "token_chars": [
+              "letter"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "mappings": {
+    "properties": {
+      "id": {
+        "type": "keyword"
+      },
+      "street_address_suggest": {
+        "type": "text",
+        "analyzer": "edge_ngram_analyzer"
+      },
+      "street": {
+        "type": "keyword"
+      },
+      "district": {
+        "type": "keyword"
+      },
+      "settlement": {
+        "type": "keyword"
+      },
+      "act_status": {
+        "type": "byte"
+      },
+      "ao_guid": {
+        "type": "keyword"
+      },
+      "parent_guid": {
+        "type": "keyword"
+      },
+      "ao_id": {
+        "type": "keyword"
+      },
+      "prev_id": {
+        "type": "keyword"
+      },
+      "next_id": {
+        "type": "keyword"
+      },
+      "ao_level": {
+        "type": "byte"
+      },
+      "area_code": {
+        "type": "short"
+      },
+      "auto_code": {
+        "type": "short"
+      },
+      "cent_status": {
+        "type": "byte"
+      },
+      "city_code": {
+        "type": "short"
+      },
+      "code": {
+        "type": "long"
+      },
+      "city_ar_code": {
+        "type": "short"
+      },
+      "curr_status": {
+        "type": "byte"
+      },
+      "div_type": {
+        "type": "short"
+      },
+      "end_date": {
+        "type": "date"
+      },
+      "extr_code": {
+        "type": "short"
+      },
+      "formal_name": {
+        "type": "text"
+      },
+      "ifns_fl": {
+        "type": "short"
+      },
+      "terr_ifns_fl": {
+        "type": "short"
+      },
+      "ifns_ul": {
+        "type": "short"
+      },
+      "terr_ifns_ul": {
+        "type": "short"
+      },
+      "live_status": {
+        "type": "byte"
+      },
+      "off_name": {
+        "type": "keyword"
+      },
+      "okato": {
+        "type": "long"
+      },
+      "oktmo": {
+        "type": "long"
+      },
+      "oper_status": {
+        "type": "byte"
+      },
+      "place_code": {
+        "type": "short"
+      },
+      "plain_code": {
+        "type": "long"
+      },
+      "plan_code": {
+        "type": "short"
+      },
+      "postal_code": {
+        "type": "long"
+      },
+      "region_code": {
+        "type": "byte"
+      },
+      "sub_ext_code": {
+        "type": "short"
+      },
+      "short_name": {
+        "type": "keyword"
+      },
+      "start_date": {
+        "type": "date"
+      },
+      "street_code": {
+        "type": "short"
+      },
+      "update_date": {
+        "type": "date"
+      },
+      "norm_doc": {
+        "type": "keyword"
+      },
+      "houses": {
+        "type": "nested",
+        "properties": {
+          "id": {
+            "type": "keyword"
+          },
+          "ao_guid": {
+            "type": "keyword"
+          },
+          "build_num": {
+            "type": "keyword"
+          },
+          "cad_num": {
+            "type": "keyword"
+          },
+          "counter": {
+            "type": "long"
+          },
+          "div_type": {
+            "type": "short"
+          },
+          "end_date": {
+            "type": "date"
+          },
+          "est_status": {
+            "type": "byte"
+          },
+          "house_guid": {
+            "type": "keyword"
+          },
+          "house_id": {
+            "type": "keyword"
+          },
+          "house_num": {
+            "type": "keyword"
+          },
+          "ifns_fl": {
+            "type": "short"
+          },
+          "ifns_ul": {
+            "type": "short"
+          },
+          "norm_doc": {
+            "type": "keyword"
+          },
+          "okato": {
+            "type": "long"
+          },
+          "oktmo": {
+            "type": "long"
+          },
+          "postal_code": {
+            "type": "long"
+          },
+          "region_code": {
+            "type": "byte"
+          },
+          "start_date": {
+            "type": "date"
+          },
+          "stat_status": {
+            "type": "short"
+          },
+          "str_num": {
+            "type": "keyword"
+          },
+          "str_status": {
+            "type": "byte"
+          },
+          "terr_ifns_fl": {
+            "type": "short"
+          },
+          "terr_ifns_ul": {
+            "type": "short"
+          },
+          "update_date": {
+            "type": "date"
+          }
+        }
+      }
+    }
+  }
+}
+
+GET fias_addr/_search
+GET fias_addr_suggest_tmp/_mapping
+GET fias_houses/_mapping
+
+GET fias_addr/_refresh
+GET fias_addr/_search
+{
+  "query": {"bool": {"must": [
+    {"match": {
+      "region_code": "13"
+    }},
+    {"match": {
+      "off_name": "Рузаевка"
+    }}
+
+  ]}}
+}
+
+GET fias_addr_suggest/_refresh
+GET fias_addr_suggest/_search
+{
+  "query": {"multi_match": {
+    "query": "сущ",
+    "fields": ["street_address_suggest", "houses.house_num"]
+  }}
+}
+
+
+PUT _ingest/pipeline/addr_pipeline
+{
+  "description": "Removes the 'street_address' field", 
+  "processors": [
+    {
+      "remove": {
+        "field": "street_address"
+      }
+    },
+    {
+      "remove": {
+        "field": "street_address"
+      }
+    }
+  ]
+}
+
+DELETE fias_address
+
+GET fias_addr_suggest/_search
+{
+  "query": {"match": {
+    "parent_guid": "a35889dd-6958-4d3e-8a65-3f628b9179ed"
+  }}
+}
+
+GET fias_addr_suggest/_search
+{
+  "query": {"term": {
+    "ao_guid": {
+      "value": "a35889dd-6958-4d3e-8a65-3f628b9179ed"
+    }
+  }}
+}
+
+#REINDEX BY REGION
+# Fetch 13 region only:
+POST _reindex?slices=3&refresh
+{
+  "source": {
+    "index": "fias_addr_suggest_tmp",
+    "query": {
+      "bool": {
+        "must": [
+          {
+            "match": {
+              "act_status": "1"
+            }
+          },
+          {
+            "match": {
+              "curr_status": "0"
+            }
+          },
+          {
+            "match": {
+              "live_status": "1"
+            }
+          },
+          {
+            "match": {
+              "region_code": "13"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "dest": {
+    "index": "fias_addr_suggest"
+  }
+}
+
+DELETE fias_addr_suggest
+
+GET fias_addr_suggest_tmp/_refresh
+GET fias_addr_suggest_tmp/_search
+{
+  "query": {"exists": {"field": "settlement"}}
+}
+GET fias_addr_suggest/_search
+
+
+GET _tasks?actions=*reindex
+GET _tasks/ByHpNTcITOKv51msEb6iVQ:3823
+
+GET fias_addr_suggest/_search
+{
+  "query": {"exists": {"field": "district"}}
+}
+
+GET fias_addr/_mapping
+
+GET fias_addr_suggest/_search
+{
+  "query": {"match_phrase_prefix": {
+    "formal_name": "респ"
+  }}
+}
+
+GET fias_addr_suggest/_search
+{
+  "query": {"bool": {"must": [
+    {"match": {
+      "formal_name": "Республиканская"
+    }}
+  ]}}
+}
+
+
+GET fias_addr_suggest/_search
+{
+  "_source": ["street_address_suggest",  "houses.ao_guid", "houses.house_num"],
+  "query": {"match": {
+    "street_address_suggest": "саранск респ"
+  }}
+}
+
+# Сущинского
+GET fias_houses/_search
+{
+  "size": 50, 
+  "_source": ["ao_guid",  "house_num", "build_num"], 
+  "query": {"match": {
+    "ao_guid": "1c7dbd35-3f2f-4a43-8930-ac421850db30"
+  }}
+}
+
+# Республиканская
+GET fias_houses/_search
+{
+  "size": 50, 
+  "_source": ["ao_guid",  "house_num", "build_num"], 
+  "query": {"match": {
+    "ao_guid": "9e45958d-9ba4-4ccf-9cdd-f622503c088d"
+  }}
+}
+
+
+GET fias_addr/_search
+{
+  "query": {"bool": {"must": [
+    {"match": {
+      "region_code": "13"
+    }}
+  ]}}
+}
+
+GET fias_addr/_search
+{
+  "query": {"exists": {"field": "houses"}}
+}
+
+
+POST fias_address/_doc/_update
+{
+  "script": {
+    "source": "ctx._source.remove('houses')"
+  }
+}
+
+GET fias_houses/_search
+{
+  "query": {"match": {
+    "house_id": "79405ab4-504a-4697-9276-7dd252d54ff8"
+  }}
+}
+
+DELETE fias_addr
+
+DELETE /_snapshot/my_backup/snapshot_1
+# Register repo:
+PUT /_snapshot/my_backup
+{
+  "type": "fs",
+  "settings": {
+    "compress": "true",
+    "location": "/Volumes/DATA/elasticsearch_backup"
+  }
+}
+#Start:
+PUT /_snapshot/my_backup/snapshot_2?wait_for_completion=true
+
+GET /_snapshot/_status
+GET /_snapshot/my_backup/snapshot_2/_status
+GET /_snapshot/my_backup/
+
+GET _tasks?actions=*create
+GET _tasks/ByHpNTcITOKv51msEb6iVQ:1784
+
+#===============================================
+# RESTORE:
+
+POST /_snapshot/my_backup/snapshot_1/_restore
+{
+  "indices": "fias_addr"
+}
+
+GET fias_addr/_search
+# ============================================
+
+ 
+ #================== TEST SUGGESTION ============
+ 
+ PUT music
+{
+    "mappings": {
+        "properties" : {
+            "suggest" : {
+                "type" : "completion"
+            },
+            "title" : {
+                "type": "keyword"
+            }
+        }
+    }
+}
+
+
+GET music/_mapping
+
+GET music
+
+
+PUT music/_doc/1?refresh
+{
+    "suggest" : [
+        {
+            "input": "Nevermind",
+            "weight" : 10
+        },
+        {
+            "input": "Nirvana",
+            "weight" : 3
+        }
+    ]
+}
+
+# Optimize query speed:
+GET fias_address/_search
+{
+   "_source": ["off_name", "ao_guid"], 
+   "version": false,
+   "track_total_hits": false,
+   "query": {"term": {
+    "off_name": {
+      "value": "Саранск"
+    }
+  }},
+  "highlight": {
+    "fields": {"off_name": {}}
+  }
+}
+
+  GET music/_stats
+  GET fias_address/_stats
+  
+POST music/_search?pretty
+{
+   
+    "suggest": {
+        "song-suggest" : {
+          
+            "prefix" : "nir", 
+            "completion" : { 
+                "field" : "suggest",
+                "size": "1"
+            }
+            
+        }
+    }
+}
+
+
+PUT place_path_category
+{
+    "mappings": {
+        "properties" : {
+            "suggest" : {
+                "type" : "completion",
+                "contexts": [
+                    { 
+                        "name": "place_type",
+                        "type": "category",
+                        "path": "cat"
+                    },
+                    { 
+                        "name": "location",
+                        "type": "geo",
+                        "precision": 4,
+                        "path": "loc"
+                    }
+                ]
+            },
+            "loc": {
+                "type": "geo_point"
+            }
+        }
+    }
+}
+
+
+GET place_path_category
+
+PUT place
+{
+    "mappings": {
+        "properties" : {
+            "suggest" : {
+                "type" : "completion",
+                "contexts": [
+                    { 
+                        "name": "place_type",
+                        "type": "category"
+                    },
+                    { 
+                        "name": "location",
+                        "type": "geo",
+                        "precision": 4
+                    }
+                ]
+            }
+        }
+    }
+}
+
+GET place
+
+PUT place/_doc/1
+{
+    "suggest": {
+        "input": ["timmy's", "starbucks", "dunkin donuts"],
+        "contexts": {
+            "place_type": ["cafe", "food"] 
+        }
+    }
+}
+
+GET place/_stats
+GET place_path_category/_stats
+
+PUT place_path_category/_doc/1
+{
+    "suggest": ["timmy's", "starbucks", "dunkin donuts"],
+    "cat": ["cafe", "food"] 
+}
+
+PUT fias_addr/_doc/
+
+
+POST place/_search?pretty
+{
+    "suggest": {
+        "place_suggestion" : {
+            "prefix" : "tim",
+            "completion" : {
+                "field" : "suggest",
+                "size": 10,
+                "contexts": {
+                    "place_type": [ "cafe", "restaurants" ]
+                }
+            }
+        }
+    }
+}
+POST place/_search?pretty
+{
+    "suggest": {
+        "place_suggestion" : {
+            "prefix" : "tim",
+            "completion" : {
+                "field" : "suggest",
+                "size": 10,
+                "contexts": {
+                    "place_type": [ 
+                        { "context" : "cafe" },
+                        { "context" : "restaurants", "boost": 2 }
+                     ]
+                }
+            }
+        }
+    }
+}
+
+GET fias_addr_suggest/_mapping
+
+GET fias_addr_suggest/_search
+{
+  "query": {"exists": {
+     "field": "district"}}
+}
+
+GET fias_addr_suggest/_search
+{
+  "query": {"match": {
+    "settlement":  "Сабаево"
+  }}
+}
+
+
+POST _scripts/simple_search
+{
+    "script": {
+        "lang": "mustache",
+        "source": {
+            "query": {
+                "match": {
+                    "settlement": "{{query_string}}"
+                }
+            }
+        }
+    }
+}
+
+GET _scripts/simple_search
+GET _search/template
+{
+    "id": "simple_search", 
+    "params": {
+        "query_string": "Сабаево"
+    }
+}
+
+DELETE _scripts/<templateid>
+
+
+
+POST fias_addr_suggest/_search?pretty
+{
+    "_source": ["street_address_suggest",  "district",  "settlement", "street",   "houses.house_num", "houses.build_num", "houses.cad_num" ],
+    "suggest": {
+        "place_suggestion" : {
+            "prefix" : "сабаево",
+            "completion" : {
+                "field" : "street_address_suggest",
+                "size": 10
+            }
+        }
+    }
+}
+
+POST _scripts/suggest_search
+{
+  "script": {
+    "lang": "mustache",
+    "source": {
+      "suggest": {
+        "place_suggestion": {
+          "prefix": "{{prefix}}",
+          "completion": {
+            "field": "street_address_suggest",
+            "size": 10
+          }
+        }
+      }
+    }
+  }
+}
+
+GET _scripts/suggest_search
+
+
+GET fias_address/_stats/request_cache?human
+
+GET _stats/request_cache?human
+
+
+
+#  ===========TEST AUTOCOMPLETE=====================
+#https://blog.bitsrc.io/how-to-build-an-autocomplete-widget-with-react-and-elastic-search-dd4f846f784
+
+DELETE customer
+GET customer/_search
+{
+  "_source": ["fullName"], 
+  "query": {"match_all": {}}
+}
+PUT customer/
+{
+  "settings": {
+    "index": {
+      
+      "analysis": {
+        "filter": {},
+        "analyzer": {
+          "analyzer_keyword": {
+            "tokenizer": "keyword",
+            "filter": "lowercase"
+          },
+          "edge_ngram_analyzer": {
+            "filter": [
+              "lowercase"
+            ],
+            "tokenizer": "edge_ngram_tokenizer"
+          }
+        },
+        "tokenizer": {
+          "edge_ngram_tokenizer": {
+            "type": "edge_ngram",
+            "min_gram": 2,
+            "max_gram": 5,
+            "token_chars": [
+              "letter"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "mappings": {
+    "properties": {
+      "fullName": {
+        "type": "text",
+        "analyzer": "edge_ngram_analyzer"
+      },
+      "shortCode": {
+        "type": "text"
+      },
+      "createdDate": {
+        "type": "date"
+      }
+    }
+  }
+}
+
+ GET customer/_search
+
+ POST customer/_doc/1
+  {
+    "fullName": "Rachel Karen Green",
+    "shortCode": "RKG10",
+    "createdDate": "2018-10-10"
+  }
+
+  POST customer/_doc/2
+  {
+    "fullName": "Monica Eustace Geller",
+    "shortCode": "MEG52",
+    "createdDate": "2018-01-12"
+  }
+
+  POST customer/_doc/3
+  {
+    "fullName": "Ross Eustace Geller",
+    "shortCode": "REG12",
+    "createdDate": "2018-02-21"
+  }
+
+  POST customer/_doc/4
+  {
+    "fullName": "Chandler Muriel Bin",
+    "shortCode": "CMB14",
+    "createdDate": "2018-02-21"
+  }
+
+  POST customer/_doc/5
+  {
+    "fullName": "Phoebe Buffay",
+    "shortCode": "PBF01",
+    "createdDate": "2018-04-12"
+  }
+
+  POST customer/_doc/6
+  {
+    "fullName": "Joey Francis Tribbiani",
+    "shortCode": "JFT99",
+    "createdDate": "2018-05-15"
+  }
+
+
+GET customer/_search
+{
+  "query": {"match": {
+    "fullName": "geller"
+  }},
+  "sort": [
+    "_score",
+    {
+      "createdDate": {
+        "order": "desc"
+      }
+    }
+  ]
+}
+
+GET customer/_search
+{
+  "query": {"multi_match": {
+    "query": "CMB14",
+    "fields": ["fullName", "shortCode"]
+  }}
+}
+
+
+GET fias_addr_suggest/_refresh
+
+
+GET fias_addr_suggest/_search
+{
+"size":"0",
+"ggs" : {
+"uniq_gender" : {
+"terms" : { "field" : "Gender" }
+}
+}
+}
+  

@@ -1,26 +1,59 @@
 type Address {
     id: ID!,
-    aoid: String,
-    guid: String,
+    recordId: String,
+    aoGUID:String,
+    plainCode: String,
+    street_address_suggest: String,
+    parentGUID: String,
+    settlement: String,
+    streetName:String,
     name: String,
     type: String,
     regionCode: String,
+    district: String,
     cityCode: String,
     placeCode: String,
     aoLevel: Int,
     startDate: String,
     updateDate: String,
     endDate: String,
-    actualityStatus: Int,
+    actStatus: Int,
     liveStatus: Int,
-    currentStatus: Int
+    currentStatus:Int,
+    houses(houseNum: String, streetGuid: String): [House],
+}
+
+type House {
+    id: ID!,
+    houseId: String,
+    streetFiasId:String,
+    regionCode: String,
+    postalCode: String,
+    houseNumber: String,
+    buildNumber: String,
+    strNumber: String,
+    cadastrNumber: String,
+    startDate: String,
+    endDate: String,
+    updateDate: String,
+}
+
+type AddressRequest {
+    json: String,
+    postcode: String,
+    state: String,
+    city: String,
+    road: String,
+    house_number: String,
+    unit: String
+    expanded:String
 }
 
 
-
-
 type Query {
-    addressByGuid(guid: String): [Address]
-    addressByName(name: String): [Address]
+    address(aoGUID: String): [Address]
+    street(name: String, parentGUID: String): [Address]
+    city(name:String):[Address]
+    #    index:Int
 }
 

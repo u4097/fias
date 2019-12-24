@@ -1,0 +1,33 @@
+version: '3'
+services:
+  fias:
+    container_name: fias-server
+    restart: always
+    build: .
+    image: oleg2019/fias-server
+    environment: 
+      - RESTORE_ON_START=1
+    #working_dir: /app
+    #volumes:
+    #- "/etc/localtime:/etc/localtime:ro"
+    #- .:/app
+    #- maven:/root/.m2
+    expose:
+    - 8080
+    - 8000
+    ports:
+      - 8080:8080
+      - 8000:8000
+    networks:
+      - es_elastic
+    command: java -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000 -jar fias-0.0.1.jar 
+    #command: mvn clean spring-boot:run
+
+
+#volumes:
+  #maven:
+    #driver: local
+
+networks:
+  es_elastic:
+      external: true
