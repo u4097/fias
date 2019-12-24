@@ -3,13 +3,13 @@ package ru.bazis.fias;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.core.env.Environment;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import jep.SharedInterpreter;
-import jep.Interpreter;
+import org.springframework.scheduling.annotation.Scheduled;
+
 
 
 @SpringBootApplication
@@ -17,37 +17,43 @@ import jep.Interpreter;
 public class Application implements CommandLineRunner {
 
     private static final Logger logger = LoggerFactory.getLogger(Application.class);
+    
+    @Autowired
+    private RestoreTask restoreTask;
 
     @Autowired
-    private Environment env;
+    private UpdateTask updateTask;
+
+    @Scheduled(cron = "${update.cron.exr}")
+    public void execute() {
+	    updateTask.updateTask();
+    }
+
+    @Value("${restore.on.start}")
+    private String  restoreOnStart;
 
     @Override
     public void run(String...args) throws Exception {
-	    logger.info("JAVA_HOME: {}", env.getProperty("JAVA_HOME"));
-	    logger.info("APP.NAME: {}", env.getProperty("app.name"));
+
+	    if (restoreOnStart != null) {
+		    if (restoreOnStart.equals("1")) {
+			    logger.info("RESTORE ON START IS ON");
+			    restoreTask.restore();
+			    //restoreTask.status();
+		    } else {
+			  System.out.println("RESTORE ON START IS OFF");
+		    }
+	    }
+
     }
 
     
     public static void main(String[] args) {
-	//try {
-	    ////restore();
-	    //System.out.println("Start app in main()");
-	//} catch (Exception e) {
-	    //System.out.println(e.getMessage());
-	//}
 	
         SpringApplication.run(Application.class, args);
 
     }
 
-    public static void restore() throws Exception {
-
-        try (Interpreter interp = new SharedInterpreter()) {
-            interp.exec("from fiases.snapshot import register,restore");
-            interp.exec("register()");
-            interp.exec("restore()");
-        }
-    }
 }
 
 

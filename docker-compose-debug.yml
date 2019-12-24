@@ -5,6 +5,8 @@ services:
     restart: always
     build: .
     image: oleg2019/fias-server
+    environment: 
+      - RESTORE_ON_START=1
     #working_dir: /app
     #volumes:
     #- "/etc/localtime:/etc/localtime:ro"

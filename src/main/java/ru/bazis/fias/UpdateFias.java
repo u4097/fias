@@ -10,7 +10,8 @@ public class UpdateFias {
         try (Interpreter interp = new SharedInterpreter()) {
             interp.exec("import fiases");
             interp.exec("from fiases.fias_update import updateFias");
-            interp.exec("updateFias()");
+	    interp.exec("updateFias()");
+	    //interp.exec("print('ADDR_UPDATE_CNT: ', str(updateFias()))");
         }
     }
 }

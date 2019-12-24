@@ -1,5 +1,7 @@
 package ru.bazis.fias;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
@@ -7,73 +9,32 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import lombok.Data;
-import lombok.val;
 import org.apache.http.HttpHost;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestHighLevelClient;
-import org.elasticsearch.common.bytes.BytesReference;
 import org.elasticsearch.script.ScriptType;
 import org.elasticsearch.script.mustache.SearchTemplateRequest;
 import org.elasticsearch.script.mustache.SearchTemplateResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
-import org.springframework.data.elasticsearch.core.query.GetQuery;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.bazis.fias.model.Address;
 import ru.bazis.fias.service.RepositoryService;
 
 @RestController
 @RequestMapping("/")
 public class FiasRestController {
 
-  private ElasticsearchOperations elasticsearchOperations;
+  private static final Logger logger = LoggerFactory.getLogger(FiasRestController.class);
+
   @Autowired
   RepositoryService repositoryService;
-
-  public FiasRestController(ElasticsearchOperations elasticsearchOperations) {
-    this.elasticsearchOperations = elasticsearchOperations;
-  }
-
-
-  /**
-   * Получение адресного объекта по id
-   *
-   * @param id Id Адресного объекта в Elasticsearch, совпадает с ФИАС полем AO_ID
-   * @return Address Структурированное описание адреса в формате JSON
-   */
-  @GetMapping("/addressId/{id}")
-  public Address findById(@PathVariable("id") String id) {
-    Address address = elasticsearchOperations
-        .queryForObject(GetQuery.getById(id), Address.class);
-    return address;
-  }
-
-
-  @Data
-  class AddressResponse {
-
-    String district_type;
-    String district;
-    String settlement_type;
-    String settlement;
-    String short_name;
-    String off_name;
-    String postal_code;
-    String region_code;
-    String okato;
-    String ifns_fl;
-    String code;
-    String ao_level;
-    String address;
-  }
 
 
   /**
@@ -92,38 +53,46 @@ public class FiasRestController {
       try {
         jsonResponse = new ObjectMapper().writeValueAsString(addressMap);
       } catch (JsonProcessingException e) {
-        e.printStackTrace();
+        logger.error("Fail to get address by guid: {}",e);
       }
     } catch (IOException e) {
-      e.printStackTrace();
+        logger.error("Fail to get address by guid: {}",e);
     }
 
     return jsonResponse;
   }
 
+   @Value("${elasticsearch.host}")
+   private  String  host;
+
+   @Value("${elasticsearch.port}")
+   private  int  port;
+
+   @Value("${elasticsearch.transport}")
+   private  String  transport;
+
+   @Value("${elasticsearch.index.address}")
+   String addressIndex;
+
+   @Value("${elasticsearch.template}")
+   String addressGuidTemplate;
+
 
   private List<Map<String, Object>> getAddressByGuid(String guid) throws IOException {
 
-    val client = new RestHighLevelClient(
-        RestClient.builder(new HttpHost("es01", 9200, "http")));
-
     SearchTemplateRequest request = new SearchTemplateRequest();
-    request.setRequest(new SearchRequest("mordovia"));
+    request.setRequest(new SearchRequest(addressIndex));
 
     request.setScriptType(ScriptType.STORED);
-    request.setScript("address_guid");
-
-//    request.setSimulate(true);
+    request.setScript(addressGuidTemplate);
 
     Map<String, Object> params = new HashMap<>();
     params.put("guid", guid);
     request.setScriptParams(params);
 
+    RestHighLevelClient client = new RestHighLevelClient(RestClient.builder(new HttpHost(host, port, transport)));
     SearchTemplateResponse response = client.searchTemplate(request, RequestOptions.DEFAULT);
     SearchResponse searchResponse = response.getResponse();
-
-    SearchTemplateResponse renderResponse = client.searchTemplate(request, RequestOptions.DEFAULT);
-    BytesReference source = renderResponse.getSource();
 
     List<Map<String, Object>> mapList = new ArrayList<>();
 
@@ -132,27 +101,8 @@ public class FiasRestController {
       mapList.add(it.getSourceAsMap());
     });
 
-//    List<Address> addressList = new ArrayList<>();
-/*
-    mapList.forEach(it -> {
-      try {
-        Optional<Address> address = repositoryService.getOneByRecordId(it.get("ao_id").toString());
-        addressList.add(address.orElseGet(Address::new));
-      } catch (Exception e) {
-        System.out.println(it.toString());
-      }
-    });
-*/
-
     return mapList;
   }
-
-/*
-  @Bean
-  Instrumentation instrumentation() {
-    return new TracingInstrumentation();
-  }
-*/
 
 }
 
