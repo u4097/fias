@@ -20,12 +20,12 @@ public class RestoreTask {
 	    interp.exec("System.out.println('Starting restore task...')");
 	    interp.exec("from fiases.snapshot import register,restore");
 	    interp.exec("from fiases.fias_update import getRestoreStatus");
-	    interp.exec("System.out.println('1.register')");
+	    interp.exec("System.out.println('1.register fias repository')");
 	    interp.exec("register()");
-	    interp.exec("System.out.println('2.restore')");
+	    interp.exec("System.out.println('2.restore indices [address, houses]...')");
 	    interp.exec("restore()");
 	    //interp.exec("getRestoreStatus()");
-	    interp.exec("System.out.print('finish')");
+	    interp.exec("System.out.println('Finish restore task. Service ready.')");
         }
     }
 
