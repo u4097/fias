@@ -36,6 +36,10 @@ RUN yum -y update && yum install -y \
 
 ARG  FIASES_VER
 RUN pip install --user fiases==$FIASES_VER --no-cache
+RUN yum install -y epel-release && yum install -y jq && jq --version  
 
-COPY ./target/fias-0.0.1.jar .
-CMD  java -jar fias-0.0.1.jar
+
+ARG  FIAS_VER
+ENV  FIAS_VER  ${FIAS_VER}
+COPY ./target/fias-${FIAS_VER}.jar .
+CMD  java -jar fias-${FIAS_VER}.jar

@@ -6,6 +6,7 @@ services:
     build: 
             context: .
             args:
+              - FIAS_VER=1.0.5
               - FIASES_VER=1.8.103
     image: fias/fias-server
     environment: 
@@ -17,7 +18,7 @@ services:
       - 8080:8080
     networks:
       - es_elastic
-    command: java -jar fias-0.0.1.jar 
+    #command: java -jar fias-${FIAS_VER}.jar 
 
 
 networks:

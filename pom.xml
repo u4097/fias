@@ -11,7 +11,7 @@
     </parent>
     <groupId>ru.bazis</groupId>
     <artifactId>fias</artifactId>
-    <version>0.0.1</version>
+    <version>1.0.5</version>
     <name>fias</name>
     <description>Fias server</description>
 
@@ -68,7 +68,7 @@
             <artifactId>jep</artifactId>
             <version>3.9.0</version>
         </dependency>
-
+	
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
